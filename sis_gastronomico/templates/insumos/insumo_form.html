@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Formulario de Insumo</h3>
+<div class="divider"></div>
+
+<form method="post" autocomplete="off">
+  <div class="row">
+    {% csrf_token %}
+    {{ form.nombre | materializecss:'s12 xl12' }}
+  </div>
+  <div class="row">
+    {{ form.descripcion | materializecss:'s12 xl12' }}
+  </div>
+  <div class="row">
+
+  <div class="row">
+    {{stock_insumo_form.management_form}}
+                {% for form in stock_insumo_form %}
+                    {{ form.id }}
+                    <div class="inline {{ stock_insumo_form.prefix }}">
+                        {{ form.cantidad | materializecss:'s12 xl12' }}
+                    </div>
+                {% endfor %}
+  </div>
+    <button class="btn waves-effect waves-light col s12 xl2" type="submit" name="action">
+      <i class="material-icons icon-align">check</i>
+      Guardar
+    </button>
+    <a class="col s12 offset-xl8 xl2 btn waves-effect waves-light red " href="{% url 'insumos:index' %}">
+      <i class="material-icons icon-align">cancel</i>
+      Cancelar
+    </a>
+  </div>
+  </div>
+</form>
+
+{% endblock %}

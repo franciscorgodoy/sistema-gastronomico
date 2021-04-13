@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="center">Informes de Pedidos</h3>
+<div class="divider"></div>
+
+
+<div class="row">
+    <div class="col xl12 center">
+        <h1>Resultados</h1>
+    </div>
+    {% for turno in turnos %}
+    <div class="col xl12 center">
+        <h5>Turno: {{turno.turno}}</h5>
+    </div>
+    <h5 class="center">Cantidad de Pedidos Totales</h5>
+    <div class="col xl10 offset-xl1" >
+        <div class="card">
+            <div class="card content"  style="padding: 0.5em !important;">
+                <canvas id="m_pedidos_chart{{forloop.counter}}" height="150" ></canvas>
+            </div>
+        </div>
+    </div>
+    <h5 class="center">Cantidad de Productos Totales</h5>
+    <div class="col xl10 offset-xl1" >
+        <div class="card">
+            <div class="card content"  style="padding: 0.5em !important;">
+                <canvas id="prod_x_prod_chart{{forloop.counter}}" height="150" ></canvas>
+            </div>
+        </div>
+    </div>
+    <h5 class="center">Facturación Total de los Pedidos</h5>
+    <div class="col xl10 offset-xl1" >
+        <div class="card">
+            <div class="card content"  style="padding: 0.5em !important;">
+                <canvas id="m_pagos_chart{{forloop.counter}}" height="150" ></canvas>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+<div class="row">
+    <a class="col s12 xl12 btn-large" href="{% url 'pedidos:index' %}">Volver</a>
+</div>
+
+<script>
+
+function randomInt(min, max) {
+	return min + Math.floor((max - min) * Math.random());
+}
+
+var colors = [`rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`,]
+
+{% for turno in turnos %}
+var ctx = document.getElementById('m_pedidos_chart{{forloop.counter}}');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    label: [ {% for dato in turno.medios_pedidos %} "{{dato.tipo}}", {% endfor %} ],
+    data: {
+        responsive: true,
+        labels: [ {% for dato in turno.medios_pedidos %} "{{dato.tipo}}", {% endfor %} ],
+        datasets: [{
+            data: [ {% for dato in turno.medios_pedidos %} {{dato.cantidad}}, {% endfor %} ],
+            backgroundColor: colors,
+            borderColor: colors,
+            borderWidth: 2,
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'Pedidos Totales: {{turno.total_pedidos}}'
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 1,
+                    maxTicksLimit: 5
+                }
+            }]
+        }
+    },
+});
+
+var ctx = document.getElementById('prod_x_prod_chart{{forloop.counter}}');
+var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        responsive: true,
+        labels: [ {% for dato in turno.total_tipos_productos %} "{{dato.tipo}}", {% endfor %} ],
+        datasets: [{
+            data: [ {% for dato in turno.total_tipos_productos %} {{dato.cantidad}}, {% endfor %} ],
+            backgroundColor: colors,
+            borderColor: colors,
+            borderWidth: 2,
+            weight: 1,
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'Productos Totales: {{turno.total_productos.total}}'
+        },
+    }
+});
+
+var ctx = document.getElementById('m_pagos_chart{{forloop.counter}}');
+var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        responsive: true,
+        labels: [ {% for dato in turno.total_medio_pago %} "{{dato.tipo}}", {% endfor %} ],
+        datasets: [{
+            label: '# Pedidos por Medio de Pedido',
+            data: [ {% for dato in turno.total_medio_pago %} {{dato.total}}, {% endfor %} ],
+            backgroundColor: colors,
+            borderColor: colors,
+            borderWidth: 2,
+            weight: 1,
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'Facturacion Total: ${{turno.total_facturado.total}}'
+        },
+    }
+});
+{% endfor %}
+
+
+</script>
+</div>
+<style>
+    /* canvas{
+        width:500px !important;
+        height: 500px !important;
+    } */
+</style>
+{% endblock %}

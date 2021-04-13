@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Formulario de Pedido</h3>
+<div class="divider"></div>
+
+    <h3 class="center">Pedido N° {{ pedido.numero_pedido }}</h3>
+    <div class="col s12 xl12">
+        <table class="highlight centered">
+            <thead>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+            </thead>
+            <tbody>
+                {% for detalle_pedido in object.detallepedido_set.all %}
+                <tr>
+                    <td>{{ detalle_pedido.producto }}</td>
+                    <td>{{ detalle_pedido.cantidad }}</td>
+                    <td>${{ detalle_pedido.precio_total }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>${{ precio_total }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="center">Total del Pedido: ${{ object.precio_total }}</h3>
+
+        <div class="row">
+            <a class="col s12 xl2 offset-xl1 btn-large green" href="{% url 'pedidos:update_pedido' object.id %}">Modificar</a><div></div>
+            <a class="col s12 xl2 offset-xl2 btn-large red" href="{% url 'pedidos:delete_pedido' object.id %}">Borrar</a><div></div>
+            <a class="col s12 xl2 offset-xl2 btn-large" href="{% url 'pedidos:index' %}">Volver</a>
+        </div>
+    </div>
+
+
+{% endblock %}

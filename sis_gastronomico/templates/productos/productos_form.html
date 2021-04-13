@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Formulario de Producto</h3>
+<div class="divider"></div>
+
+<form method="POST" autocomplete="off">
+  {% csrf_token %}
+  <div class="row">
+    {{ form.nombre | materializecss:'s12 xl6' }}
+    {{ form.tipo_producto | materializecss:'s12 xl6' }}
+  </div>
+  <div class="row">
+    {{ form.descripcion | materializecss:'s12 xl12' }}
+  </div>
+
+  <div class="row">
+    {{ form.precio | materializecss:'s12 xl6' }}
+    {{stock_producto_form.management_form}}
+      {% for inform in stock_producto_form %}
+          {{ inform.id }}
+          <div class="inline {{ stock_producto_form.prefix }}">
+              {{ inform.cantidad | materializecss:'s12 xl6' }}
+          </div>
+      {% endfor %}
+  </div>
+  <div class="row">
+    <button class="btn col s12 xl2" type="submit"><i class="material-icons icon-align">check</i> Agregar</button><div class="col s2"></div>
+    <a class="col s12 offset-xl8 xl2 btn red" href="{% url 'productos:index' %}"><i class="material-icons icon-align">cancel</i> Cancelar</a>
+  </div>
+</form>
+
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function(){
+            $('input.autocomplete').autocomplete({
+                data: {
+                  {% for producto in productos %}
+                    "{{producto}}": null,
+                  {% endfor %}
+                },
+            });
+
+            // Initialize materialize data picker
+            $('.datepicker').datepicker({'format': 'yyyy-mm-dd'});
+            $('select').formSelect();
+
+            let labels = $('li label');
+            for (i = 0; i < labels.length; i++){
+                if (labels[i].innerHTML.search('<span>') != -1) continue;
+                newinner =  '><span>' + labels[i].innerHTML.split('>')[1] + '</span>';
+                labels[i].innerHTML = labels[i].innerHTML.split('>')[0] + newinner;
+            }
+        });
+    </script>
+{% endblock %}

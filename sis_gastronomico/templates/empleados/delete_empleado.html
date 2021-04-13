@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Eliminar Empleado</h3>
+<div class="divider"></div>
+
+<div class="row center">
+    <h4>Esta seguro que quiere eliminar al empleado '{{object.nombre}}'?</h4>
+</div>
+
+<div class="row center">
+    <form method="post" id="form">
+        {% csrf_token %}
+        <a class="btn green" id="confirmform"><i class="material-icons icon-align">check</i> Confirmar</a>
+        <a class="btn red" href="{% url 'empleados:inicio' %}"><i class="material-icons icon-align">cancel</i> Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(() => {
+        $('#confirmform').click(() => {
+            $('form').submit();
+        });
+    });
+</script>
+{% endblock %}

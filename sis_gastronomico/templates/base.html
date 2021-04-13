@@ -1,0 +1,175 @@
+{% load static i18n %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}sis-gastronomico{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <link rel="icon" href="{% static 'images/favicons/dish.png' %}">
+
+    {% block css %}
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
+    <link href="{% static 'css/materialize.min.css' %}" rel="stylesheet">
+    <!-- Latest compiled and minified Bootstrap CSS -->
+    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+
+
+    <!-- Your stuff: Third-party CSS libraries go here -->
+
+    <!-- This file stores project-specific CSS -->
+
+    <link href="{% static 'css/project.css' %}" rel="stylesheet">
+
+
+    {% endblock %}
+
+  </head>
+
+  <header>
+    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="medium material-icons">menu</i></a>
+    <ul class="collection version-cont">
+      <li class="collection-item version-text">Version {{ version }} - {{ fecha }}</li>
+    </ul>
+  </header>
+
+  <body>
+
+
+    <ul id="slide-out" class="sidenav sidenav-fixed">
+      <li><a class="sidenav-logo centered center-align" href="{% url 'home' %}"><i class="medium material-icons">room_service</i> SIS GASTRONOMICO</a></li>
+      {% if request.user.is_authenticated %}
+      <li class="no-padding">
+        <ul class="collapsible popout">
+          <li class="teal waves-effect">
+            <a class=" collapsible-header "><i class="material-icons">assignment_late</i>PEDIDOS<i class="material-icons right">arrow_drop_down</i></a>
+            <div class="collapsible-body">
+              <ul>
+                <li class="teal darken-1"><a href="{% url 'pedidos:index' %}"><i class="material-icons">format_list_bulleted</i>LISTADO</a></li>
+                <li class="teal darken-1"><a href="{% url 'pedidos:create_pedido' %}"><i class="material-icons">add_box</i>PEDIDO</a></li>
+                <li class="teal darken-1"><a href="{% url 'pedidos:list_medio_pago' %}"><i class="material-icons">format_list_bulleted</i>MEDIOS DE PAGO</a></li>
+                <li class="teal darken-1"><a href="{% url 'pedidos:create_medio_pago' %}"><i class="material-icons">add_box</i>MEDIO DE PAGO</a></li>
+                <li class="teal darken-1"><a href="{% url 'pedidos:list_medio_pedido' %}"><i class="material-icons">format_list_bulleted</i>MEDIOS DE PEDIDO</a></li>
+                <li class="teal darken-1"><a href="{% url 'pedidos:create_medio_pedido' %}"><i class="material-icons">add_box</i>MEDIO DE PEDIDO</a></li>
+                <li class="teal darken-1"><a href="{% url 'pedidos:informes' %}"><i class="material-icons">assessment</i>INFORMES</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="red waves-effect">
+            <a class="collapsible-header "><i class="material-icons">monetization_on</i>GASTOS<i class="material-icons right">arrow_drop_down</i></a>
+            <div class="collapsible-body">
+              <ul>
+                <li class="red darken-1"><a href="{% url 'gastos:index' %}"><i class="material-icons">format_list_bulleted</i>GASTOS</a></li>
+                <li class="red darken-1"><a href="{% url 'gastos:create_gasto' %}"><i class="material-icons">add_box</i>GASTO</a></li>
+                <li class="red darken-1"><a href="{% url 'gastos:list_tipo_gasto' %}"><i class="material-icons">format_list_bulleted</i>TIPOS DE GASTOS</a></li>
+                <li class="red darken-1"><a href="{% url 'gastos:create_tipo_gasto' %}"><i class="material-icons">add_box</i>TIPO DE GASTO</a></li>
+                <li class="red darken-1"><a href="{% url 'gastos:list_adelantoSueldo' %}"><i class="material-icons">format_list_bulleted</i>ADELANTO DE SUELDO</a></li>
+                <li class="red darken-1"><a href="{% url 'gastos:create_adelantoSueldo' %}"><i class="material-icons">add_box</i>ADELANTO DE SUELDO</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="orange waves-effect">
+            <a class=" collapsible-header "><i class="material-icons">assignment</i>INSUMOS<i class="material-icons right">arrow_drop_down</i></a>
+            <div class="collapsible-body">
+              <ul>
+                <li class="orange darken-1"><a href="{% url 'insumos:index' %}"><i class="material-icons">format_list_bulleted</i>LISTADO</a></li>
+                <li class="orange darken-1"><a href="{% url 'insumos:create_insumo' %}"><i class="material-icons">add_box</i>INSUMO</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="blue waves-effect">
+            <a class=" collapsible-header "><i class="material-icons">room_service</i>PRODUCTOS<i class="material-icons right">arrow_drop_down</i></a>
+            <div class="collapsible-body">
+              <ul>
+                <li class="blue darken-1"><a href="{% url 'productos:index' %}"><i class="material-icons">format_list_bulleted</i>LISTADO</a></li>
+                <li class="blue darken-1"><a href="{% url 'productos:crear_producto' %}"><i class="material-icons">add_box</i>PRODUCTO</a></li>
+                <li class="blue darken-1"><a href="{% url 'productos:listar_tipo_producto' %}"><i class="material-icons">format_list_bulleted</i>TIPOS PRODUCTOS</a></li>
+                <li class="blue darken-1"><a href="{% url 'productos:crear_tipo_producto' %}"><i class="material-icons">add_box</i>TIPO PRODUCTO</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="green waves-effect">
+            <a class=" collapsible-header "><i class="material-icons">person</i>EMPLEADOS<i class="material-icons right">arrow_drop_down</i></a>
+            <div class="collapsible-body">
+              <ul>
+                <li class="green darken-1"><a href="{% url 'empleados:inicio' %}"><i class="material-icons">format_list_bulleted</i>LISTADO</a></li>
+                <li class="green darken-1"><a href="{% url 'empleados:create_empleado' %}"><i class="material-icons">add_box</i>EMPELADO</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="purple waves-effect">
+            <a class=" collapsible-header "><i class="material-icons">perm_contact_calendar</i>TURNOS<i class="material-icons right">arrow_drop_down</i></a>
+            <div class="collapsible-body">
+              <ul>
+                <li class="purple darken-1"><a href="{% url 'turnos:index' %}"><i class="material-icons">format_list_bulleted</i>LISTADO</a></li>
+                <li class="purple darken-1"><a href="{% url 'turnos:create_turno' %}"><i class="material-icons">add_box</i>TURNO</a></li>
+                <li class="purple darken-1"><a href="{% url 'turnos:list_horario' %}"><i class="material-icons">format_list_bulleted</i>LISTADO HORARIOS</a></li>
+                <li class="purple darken-1"><a href="{% url 'turnos:create_horario' %}"><i class="material-icons">add_box</i>HORARIO</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="yellow waves-effect">
+            <a class=" collapsible-header "><i class="material-icons">shopping_cart</i>COMPRAS<i class="material-icons right">arrow_drop_down</i></a>
+            <div class="collapsible-body">
+              <ul>
+                <li class="yellow darken-1"><a href="{% url 'compras:index' %}"><i class="material-icons">format_list_bulleted</i>LISTADO</a></li>
+                <li class="yellow darken-1"><a href="{% url 'compras:create_compra' %}"><i class="material-icons">add_box</i>COMPRA</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="indigo waves-effect">
+            <a class=" collapsible-header "><i class="material-icons">shopping_basket</i>PROVEEDORES<i class="material-icons right">arrow_drop_down</i></a>
+            <div class="collapsible-body">
+              <ul>
+                <li class="indigo darken-1"><a href="{% url 'proveedores:index' %}"><i class="material-icons">format_list_bulleted</i>LISTADO</a></li>
+                <li class="indigo darken-1"><a href="{% url 'proveedores:crear_proveedor' %}"><i class="material-icons">add_box</i>PROVEEDOR</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </ul>
+        {% endif %}
+      </li>
+    </ul>
+
+
+
+
+    <div class="container">
+      <div class="card z-depth-2" style="padding: 1em;">
+
+        {% block content %}
+        {% endblock content %}
+      </div>
+    </div>
+
+    {% block modal %}{% endblock modal %}
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <!-- <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script> -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> -->
+    <script src="{% static 'js/materialize.min.js' %}"></script>
+    <script src="{% static 'js/dynamic_form.js' %}"></script>
+    {% block javascript %}
+    {% endblock javascript %}
+    <script src="{% static 'js/project.js' %}"></script>
+
+  </body>
+</html>

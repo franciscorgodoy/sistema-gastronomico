@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Formulario Adelando de Sueldo</h3>
+<div class="divider"></div>
+
+<form method="post">
+    <div class="row">
+      {% csrf_token %}
+      {{ form.empleado | materializecss:'s12 xl12' }}
+    </div>
+    <div class="row">
+      {{ form.monto_pagado | materializecss:'s12 xl6' }}
+    </div>
+    <div class="row">
+        <button class="btn col s12 xl2" type="submit">
+            <i class="material-icons icon-align">check</i>
+            Agregar
+        </button><div class="col s2"></div>
+
+        <a class="col s12 offset-xl8 xl2 btn red" href="{% url 'gastos:list_adelantoSueldo' %}">
+            <i class="material-icons icon-align">cancel</i>
+            Cancelar
+        </a>
+    </div>
+  </form>
+
+{% endblock %}

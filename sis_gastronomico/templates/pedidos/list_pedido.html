@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="center">Listado de Pedidos</h3>
+<div class="divider"></div>
+
+{% if 'ok' in request.GET %}
+<div class="row">
+    <ul class="collection green-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 green-text">
+            <span class="badge">
+                <i class="material-icons green-text">check_box</i>
+            </span>
+            Pedido Creado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'up' in request.GET %}
+<div class="row">
+    <ul class="collection blue-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 blue-text">
+            <span class="badge">
+                <i class="material-icons blue-text">check_box</i>
+            </span>
+            Pedido Modificado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'del' in request.GET %}
+<div class="row">
+    <ul class="collection orange-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 orange-text">
+            <span class="badge">
+                <i class="material-icons orange-text">check_box</i>
+            </span>
+            Pedido Eliminado con Éxito!
+        </li>
+    </ul>
+</div>
+{% endif %}
+
+<div>
+    <form method="post" name="formfecha" id="formfecha">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col xl1">
+                <p>Fecha:</p>
+            </div>
+            <div class="col xl11">
+                <input name="fecha" id="fecha" type="text" class="datepicker letranormal" placeholder="Seleccione una Fecha">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div>
+    <form method="post" name="cambioestado" id="cambioestado">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col xl12">
+                <input type="hidden" name="pedido_id" id="pedido_id">
+                <input type="hidden" name="encamino" id="encamino">
+                <input type="hidden" name="entregado" id="entregado">
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div class="row center">
+
+    <div class="col xl12 center">
+        <ul id="tabs-swipe-demo" class="tabs center tabs-fixed-width">
+            <li class="tab col s3 white-text "><a class="active " href="#pnentregados">No Entregados</a></li>
+            <li class="tab col s3 white-text "><a class="active " href="#pencamino">En Camino</a></li>
+            <li class="tab col s3 "><a href="#pentregados">Entregados</a></li>
+        </ul>
+    </div>
+
+    <div id="pnentregados" class="col xl12 scroller">
+        <ul name="collapsible" id="collapsible" class="collapsible expandable" style="text-align: center;">
+            {% for pedido in pnentregados %}
+            <li style="text-align: center;">
+                <div class="collapsible-header red accent-2" style="text-align: auto;">
+                    <i class="material-icons">place</i> {{ pedido.calle | title | truncatechars:30 }} {{ pedido.altura }} {% if pedido.piso %} {{ pedido.piso }} {% endif %} {% if pedido.departamento %} {{ pedido.departamento }} {% endif %} - Pedido N° {{pedido.numero_pedido}}</div>
+                <div class="collapsible-body">
+                {% if pedido.comentario %}<h4 class="center">{{pedido.comentario}}</h4>{% endif %}
+                <blockquote>
+                    <ul class="collection">
+                        <li class="collection-item"><b>Medio de Pago: </b>{{pedido.medio_pago}}</li>
+                        <li class="collection-item"><b>Medio de Pedido: </b>{{pedido.medio_pedido}}</li>
+                    {% for detalle in pedido.detallepedido_set.all %}
+                        <li class="collection-item">
+                            <b>Producto:</b> {{detalle.producto}} - <b>Cantidad:</b> {{detalle.cantidad}}
+                        </li>
+                    {% endfor %}
+                    <li class="collection-item"><b>Total: </b>${{pedido.precio_total}}</li>
+                    </ul>
+                </blockquote>
+                    <div class="row center">
+                    <div class="col xl12">
+                        <a class="col s12 xl4 offset-xl4 btn orange" href="{% url 'pedidos:update_pedido' pedido.pk %}"><i class="material-icons " style="vertical-align: middle; padding-right: .2em !important;">edit</i>Modificar</a>
+                    </div>
+                    <div class="col xl12">
+                        <a class="btn blue col xl4 offset-xl4" href="#" id="btnencamino{{forloop.counter0}}" name="btnencamino{{forloop.counter0}}"><i class="material-icons center" style="vertical-align: middle; padding-right: .2em !important;">directions_bike</i>En Camino</a>
+                    </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="pencamino" class="col xl12 scroller">
+        <ul name="collapsible" id="collapsible" class="collapsible expandable" style="text-align: center;">
+            {% for pedido in pencamino %}
+            <li style="text-align: center;">
+                <div class="collapsible-header blue accent-2" style="text-align: auto;">
+                    <i class="material-icons">place</i> {{ pedido.calle | title | truncatechars:30 }} {{ pedido.altura }} {% if pedido.piso %} {{ pedido.piso }} {% endif %} {% if pedido.departamento %} {{ pedido.departamento }} {% endif %} - Pedido N° {{pedido.numero_pedido}}</div>
+                <div class="collapsible-body">
+                {% if pedido.comentario %}<h4 class="center">{{pedido.comentario}}</h4>{% endif %}
+                <blockquote>
+                    <ul class="collection center">
+                        <li class="collection-item center"><b>Medio de Pago: </b>{{pedido.medio_pago}}</li>
+                        <li class="collection-item center"><b>Medio de Pedido: </b>{{pedido.medio_pedido}}</li>
+                    {% for detalle in pedido.detallepedido_set.all %}
+                        <li class="collection-item">
+                            <b>Producto:</b> {{detalle.producto}} - <b>Cantidad:</b> {{detalle.cantidad}}
+                        </li>
+                    {% endfor %}
+                    <li class="collection-item"><b>Total: </b>${{pedido.precio_total}}</li>
+                    </ul>
+                </blockquote>
+                <div class="row center">
+                    <div class="col xl12">
+                        <a class="col s12 xl4 offset-xl4 btn orange" href="{% url 'pedidos:update_pedido' pedido.pk %}"><i class="material-icons" style="vertical-align: middle; padding-right: .2em !important;">edit</i>Modificar</a>
+                    </div>
+                    <div class="col xl12">
+                        <a class="btn green col xl4 offset-xl4" href="#" id="btnentregado{{forloop.counter0}}" name="btnentregado{{forloop.counter0}}"><i class="material-icons center" style="vertical-align: middle; padding-right: .2em !important;">check</i>Entregado</a>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="pentregados" class="col xl12 scroller">
+        <ul name="collapsible" id="collapsible" class="collapsible expandable" style="text-align: center;">
+            {% for pedido in pentregados %}
+            <li style="text-align: center;">
+                <div class="collapsible-header green accent-2" style="text-align: auto;">
+                    <i class="material-icons">place</i> {{ pedido.calle | title | truncatechars:30 }} {{ pedido.altura }} {% if pedido.piso %} {{ pedido.piso }} {% endif %} {% if pedido.departamento %} {{ pedido.departamento }} {% endif %} - Pedido N° {{pedido.numero_pedido}}</div>
+                <div class="collapsible-body">
+                {% if pedido.comentario %}<h4 class="center">{{pedido.comentario}}</h4>{% endif %}
+                <blockquote>
+                    <ul class="collection">
+                        <li class="collection-item"><b>Medio de Pago: </b>{{pedido.medio_pago}}</li>
+                        <li class="collection-item"><b>Medio de Pedido: </b>{{pedido.medio_pedido}}</li>
+                    {% for detalle in pedido.detallepedido_set.all %}
+                        <li class="collection-item">
+                            <b>Producto:</b> {{detalle.producto}} - <b>Cantidad:</b> {{detalle.cantidad}}
+                        </li>
+                    {% endfor %}
+                    <li class="collection-item"><b>Total: </b>${{pedido.precio_total}}</li>
+                    </ul>
+                </blockquote>
+                    <div class="row center">
+                    <div class="col xl12">
+                        <a class="col s12 xl4 offset-xl4 btn orange" href="{% url 'pedidos:update_pedido' pedido.pk %}"><i class="material-icons" style="vertical-align: middle; padding-right: .2em !important;">edit</i>Modificar</a>
+                    </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+{% include 'pagination.html' %}
+<div class="row">
+    <a class="col s12 xl12 btn-large green" href="{% url 'pedidos:create_pedido' %}">Registrar Pedido</a><div></div>
+</div>
+<div class="row">
+    <a class="col s12 xl12 btn-large yellow" href="{% url 'pedidos:list_medio_pago' %}">Medios de Pagos</a><div></div>
+</div>
+<div class="row">
+    <a class="col s12 xl12 btn-large red" href="{% url 'pedidos:list_medio_pedido' %}">Medios de Pedidos</a><div></div>
+</div>
+<div class="row">
+    <a class="col s12 xl12 btn-large orange" href="{% url 'pedidos:informes' %}">Informes</a><div></div>
+</div>
+<div class="row">
+    <a class="col s12 xl12 btn-large" href="{% url 'home' %}">Volver</a>
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script>
+  $(document).ready(function(){
+    $('.tabs').tabs();
+    $('.datepicker').each((index, element) => {
+    // $(element).click(function (e){e.preventDefault();});
+    $(element).attr('placeholder', 'Ingrese una Fecha');
+    let fecha_input = $(element).val().split('-');
+    let fecha = '';
+    if (fecha_input[0] != '')
+        fecha = new Date(fecha_input[0], fecha_input[1]-1, fecha_input[2]);
+    $(element).datepicker({
+        format: 'yyyy-mm-dd',
+        setDefaultDate: true,
+        defaultDate: fecha,
+        autoClose: true,
+        i18n: {
+            months: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+            monthsShorts: ['Ene','Feb','Mar','','Abr','','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+            weekdays: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'],
+            weekdaysShort: ['Dom','Lun','Mar','Mie','Jue','Vie','Sab'],
+            weekdaysAbbrev: ['D','L','M','X','J','V','S'],
+        },
+        onClose: () => {
+            var fecha = $(element).val();
+            if (fecha !== "")
+                window.location.replace(`{% url 'pedidos:index' %}?fecha=${$(element).val()}`);
+        }
+    });
+    });
+
+    let idsnoentregados = [ {% for pedido in pnentregados %} {{pedido.pk}}, {% endfor %}];
+    let idsencamino = [ {% for pedido in pencamino %} {{pedido.pk}}, {% endfor %}];
+
+    for (var i = 0; i < idsnoentregados.length; i++) {
+        (function(){
+            console.log("aqui toy");
+            btnencamino = "#btnencamino" + i.toString();
+            var k = i;
+            $(btnencamino).click(function(){set_encamino(idsnoentregados[k])});
+        }());
+    }
+
+    for (var i = 0; i < idsencamino.length; i++) {
+        (function(){
+            btnencamino = "#btnentregado" + i.toString();
+            var k = i;
+            $(btnencamino).click(function(){set_entregado(idsencamino[k])});
+        }());
+    }
+
+    function set_encamino(id){
+        $("#pedido_id").val(String(id));
+        $("#encamino").val("1");
+        $("#entregado").val(null);
+        $("#cambioestado").submit();
+    }
+
+    function set_entregado(id){
+        $("#pedido_id").val(id);
+        $("#encamino").val(null);
+        $("#entregado").val("1");
+        $("#cambioestado").submit();
+    }
+
+  });
+</script>
+{% endblock %}

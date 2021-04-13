@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Eliminar un Turno</h3>
+<div class="divider"></div>
+
+<div class="row center">
+    <h4>Quiere eliminar el Turno {{turno.fecha}}?</h4>
+</div>
+<div class="row center">
+    <blockquote class="col xl8 offset-xl2">
+        <ul class="collection">
+            <li class="collection-item"><b>Horario:</b> {{turno.horario}}</li>
+            <li class="collection-item"><b>Empleados de este Turno:</b></li>
+            {% for empleado in turno.empleados.all %}
+            <li class="collection-item">{{empleado}}</li>
+            {% endfor %}
+        </ul>
+    </blockquote>
+</div>
+<div class="row center">
+    <form method="post" id="form">
+        {% csrf_token %}
+        <button class="btn green" type="submit"><i class="material-icons icon-align">check</i> Confirmar</button>
+        <a class="btn red" href="{% url 'turnos:index' %}"><i class="material-icons icon-align">cancel</i> Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+</script>
+{% endblock %}

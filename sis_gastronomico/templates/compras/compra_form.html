@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Formulario de Compra</h3>
+<div class="divider"></div>
+
+<div class="section">
+<form method="post" autocomplete="off">
+  <div class="row">
+    {% csrf_token %}
+    {{ form.fecha | materializecss:'s12 xl12' }}
+    {{ form.proveedor | materializecss:'s12 xl12' }}
+  </div>
+
+  <div class="row">
+
+    {{detalle_insumo_form.management_form}}
+      {% for form in detalle_insumo_form %}
+        {{ form.id }}
+        <div class="inline {{ detalle_insumo_form.prefix }}">
+            <div class="row">
+              {{ form.cantidad | materializecss:'s12 xl4' }}
+              {{ form.precio_unitario | materializecss:'s12 xl4' }}
+              {{ form.insumo | materializecss:'s12 xl4' }}
+              <div class="delete-hide">
+                  {{ form.DELETE }}
+              </div>
+              <div class="btn-delete-{{ detalle_insumo_form.prefix }} input-field col s12 center xl2"></div>
+            </div>
+        </div>
+      {% endfor %}
+    <div class="col s12 xl12 center btn-add-{{ detalle_insumo_form.prefix }}"></div>
+  </div>
+
+  <div class="row">
+    {{detalle_producto_form.management_form}}
+      {% for form in detalle_producto_form %}
+        {{ form.id }}
+        <div class="inline {{ detalle_producto_form.prefix }}">
+          <div class="row">
+            {{ form.cantidad | materializecss:'s12 xl4' }}
+            {{ form.precio_unitario | materializecss:'s12 xl4' }}
+            {{ form.producto | materializecss:'s12 xl4' }}
+            <div class="delete-hide">
+              {{ form.DELETE }}
+            </div>
+            <div class="btn-delete-{{ detalle_producto_form.prefix }} input-field col s12 center xl2"></div>
+          </div>
+        </div>
+      {% endfor %}
+    <div class="col s12 xl12 center btn-add-{{ detalle_producto_form.prefix }}"></div>
+  </div>
+
+  <div class="row">
+    <button class="btn waves-effect waves-light col s12 xl2" type="submit" name="action">
+      <i class="material-icons icon-align">check</i>
+      Guardar
+    </button>
+
+    <a class="col s12 offset-xl8 xl2 btn waves-effect waves-light red " href="{% url 'compras:index' %}">
+      <i class="material-icons icon-align">cancel</i>
+      Cancelar
+    </a>
+  </div>
+</form>
+</div>
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+  $(".inline.{{ detalle_insumo_form.prefix }}").formset({
+    prefix: "{{ detalle_insumo_form.prefix }}",
+    addText: "Agregar insumo",
+  });
+
+  $(".inline.{{ detalle_producto_form.prefix }}").formset({
+    prefix: "{{ detalle_producto_form.prefix }}",
+    addText: "Agregar producto",
+  });
+</script>
+{% endblock %}

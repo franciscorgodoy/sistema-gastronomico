@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Formulario de Pedido</h3>
+<div class="divider"></div>
+
+<form method="post" autocomplete="off">{% csrf_token %}
+  <div class="row">
+  <ul id="tabs-swipe-demo" class="tabs tabs-fixed-width">
+    <li class="tab col s3"><a href="#test-swipe-1">Direccion</a></li>
+    <li class="tab col s3"><a href="#test-swipe-2">Productos</a></li>
+    <li class="tab col s3 confirm-tab"><a href="#test-swipe-3">Confirmar</a></li>
+  </ul>
+  <div id="test-swipe-1" class="col s12 xl12 scroller">
+    <div class="row" style="margin-top: .5em !important;">
+      {{ form.medio_pedido | materializecss:'s12 xl6' }}
+      {{ form.medio_pago | materializecss:'s12 xl6' }}
+    </div>
+    <div class="row">
+      {{ form.calle | materializecss:'s12 xl6' }}
+      {{ form.altura | materializecss:'s12 xl2' }}
+      {{ form.piso | materializecss:'s12 xl2' }}
+      {{ form.departamento | materializecss:'s12 xl2' }}
+    </div>
+    <div class="row center">
+      <a class="btn tab2" id="siguiente1" href="#">Siguiente</a>
+    </div>
+  </div>
+  <div id="test-swipe-2" class="col s12 xl12 scroller">
+    <div class="row" style="margin-top: .5em !important;">
+      {{detalle_pedido_form.management_form}}
+        {% for inform in detalle_pedido_form %}
+          {{ inform.id }}
+          <div class="inline {{ detalle_pedido_form.prefix }}">
+            <div class="row">
+              {{ inform.cantidad | materializecss:'s12 xl5' }}
+              {{ inform.producto | materializecss:'s12 xl5' }}
+              <div class="delete-hide">
+                {{ inform.DELETE }}
+              </div>
+              <div class="btn-delete-{{ detalle_pedido_form.prefix }} input-field col s12 center xl2"></div>
+            </div>
+          </div>
+        {% endfor %}
+      <div class="col s12 xl12 center btn-add-{{ detalle_pedido_form.prefix }}"></div>
+      <div class="row center">
+        <a class="btn tab3" href="#" id="siguiente2" style="margin-top: 1em;">Siguiente</a>
+      </div>
+    </div>
+  </div>
+  <div id="test-swipe-3" class="col s12 xl12 scroller">
+    <div class="row" style="margin-top: .5em !important;">
+      <div class="row center">
+        <h3>Detalles del Pedido</h3>
+        <blockquote class="col xl8 offset-xl2">
+            <ul class="collection" id="collection_detalle">
+            </ul>
+        </blockquote>
+        <h1 id="total" class="col xl12"></h1>
+        {{ form.precio_total | materializecss:'s12 xl12' }}
+        {{ form.comentario | materializecss:'s12 xl12' }}
+    </div>
+      <div class="row center">
+        <button class="btn" type="submit"><i class="material-icons icon-align">check</i> CONFIRMAR</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+      <a class="col s12 xl12 btn-large" href="{% url 'pedidos:index' %}">Volver</a>
+  </div>
+</div>
+</form>
+
+<style>
+   .scroller{
+     overflow-x: hidden;
+    }
+</style>
+
+{% endblock %}
+
+{% block javascript %}
+    <script>
+    $(".inline.{{ detalle_pedido_form.prefix }}").formset({
+      prefix: "{{ detalle_pedido_form.prefix }}",
+      addText: "Agregar Producto",
+    });
+
+    var precios = { {% for producto in detalle_pedido_form.forms.0.base_fields.producto.choices.queryset %}"{{producto.id}}":{ nombre:"{{producto.nombre}}",precio:{{producto.precio}}}, {% endfor %}}
+    var tab;
+
+    function updateDetalles() {
+      var productos = $("[name$=producto]");
+      var cantidades = $("[id$=cantidad]");
+      var total = 0;
+      $('#collection_detalle').empty();
+      for (i=0; i<productos.length; i++) {
+        display = productos[i].parentElement.parentElement.parentElement.parentElement.style.display;
+        if (display !== "none"){
+          if (productos[i].value !== "" && cantidades[i].value !== ""){
+            var nombre = precios[productos[i].value].nombre;
+            var cantidad = cantidades[i].value;
+            var precio = precios[productos[i].value].precio
+            $('#collection_detalle').append(`<li class="collection-item"><b>Producto:</b> ${nombre} - <b>Cantidad:</b> ${cantidad} </li>`)
+            total += precios[productos[i].value].precio * parseInt(cantidades[i].value);
+          }
+        }
+      };
+      $("#total").text("Total Sugerido: $" + total);
+    }
+
+    $(document).ready(function(){
+      $('.tabs').tabs({
+        swipeable: false,
+      });
+      $('.tabs').click(updateDetalles);
+      $('.siguiente1').click(updateDetalles);
+      $('.siguiente2').click(updateDetalles);
+      $('.carousel').click(updateDetalles);
+      $('.confirm-tab').click(updateDetalles);
+      $('.tab2').click(() => {
+        var tab = M.Tabs.getInstance($('.tabs'));
+        tab.select('test-swipe-2');
+        updateDetalles();
+      });
+      $('.tab3').click(() => {
+        var tab = M.Tabs.getInstance($('.tabs'));
+        tab.select('test-swipe-3');
+        updateDetalles();
+      });
+
+    });
+
+    </script>
+{% endblock %}

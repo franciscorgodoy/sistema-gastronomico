@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row center">
+    <div class="row">
+        <a class="home-text col s12 xl12 btn-large teal" href="{% url 'pedidos:index' %}"><i class="material-icons icon-align">assignment_late</i> Pedidos</a>
+    </div>
+    <div class="row">
+        <a class="home-text col s12 xl12 btn-large red" href="{% url 'gastos:index' %}"><i class="material-icons icon-align">monetization_on</i> GASTOS</a>
+    </div>
+    <div class="row">
+        <a class="home-text col s12 xl12 btn-large orange" href="{% url 'insumos:index' %}"><i class="material-icons icon-align">assignment</i> INSUMOS</a>
+    </div>
+    <div class="row">
+        <a class="home-text col s12 xl12 btn-large blue" href="{% url 'productos:index' %}"><i class="material-icons icon-align">room_service</i> PRODUCTOS</a>
+    </div>
+    <div class="row">
+        <a class="home-text col s12 xl12 btn-large green" href="{% url 'empleados:inicio' %}"><i class="material-icons icon-align">person</i> EMPLEADOS</a>
+    </div>
+    <div class="row">
+        <a class="home-text col s12 xl12 btn-large purple" href="{% url 'turnos:index' %}"><i class="material-icons icon-align">perm_contact_calendar</i> Turnos</a>
+    </div>
+    <div class="row">
+        <a class="home-text col s12 xl12 btn-large yellow" href="{% url 'compras:index' %}"><i class="material-icons icon-align">shopping_cart</i> Compras</a>
+    </div>
+    <div class="row">
+        <a class="home-text col s12 xl12 btn-large indigo" href="{% url 'proveedores:index' %}"><i class="material-icons icon-align">shopping_basket</i> Provedores</a>
+    </div>
+</div>
+{% endblock %}

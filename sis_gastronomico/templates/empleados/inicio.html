@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Listado de Empleados</h3>
+<div class="divider"></div>
+
+    {% if 'ok' in request.GET %}
+    <div class="row">
+        <ul class="collection green-border-color col s12 xl10 offset-xl1">
+            <li class="collection-item s12 xl12 green-text">
+                <span class="badge">
+                    <i class="material-icons green-text">check_box</i>
+                </span>
+                Empleado Creado con Éxito!
+            </li>
+        </ul>
+    </div>
+    {% elif 'up' in request.GET %}
+    <div class="row">
+        <ul class="collection blue-border-color col s12 xl10 offset-xl1">
+            <li class="collection-item s12 xl12 blue-text">
+                <span class="badge">
+                    <i class="material-icons blue-text">check_box</i>
+                </span>
+                Empleado Modificado con Éxito!
+            </li>
+        </ul>
+    </div>
+    {% elif 'del' in request.GET %}
+    <div class="row">
+        <ul class="collection orange-border-color col s12 xl10 offset-xl1">
+            <li class="collection-item s12 xl12 orange-text">
+                <span class="badge">
+                    <i class="material-icons orange-text">check_box</i>
+                </span>
+                Empleado Eliminado con Éxito!
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+
+
+{% include 'pagination.html' %}
+<div class="row">
+    <table class="highlight centered">
+    <thead>
+        <tr>
+            <th>Apellidos</th>
+            <th>Nombres</th>
+            <th>Fecha Ingreso</th>
+            <th>Modificar/Eliminar</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+
+    {% for empleado in page_obj %}
+        <tr>
+        <td>{{empleado.apellido | truncatechars:15}}</td>
+        <td>{{empleado.nombre | truncatechars:15}}</td>
+        <td>{{empleado.fecha_ingreso|date:"d/m/Y"}}</td>
+        <td>
+            <a class="btn-small"  href="{% url 'empleados:update_empleado' empleado.id %}"><i class="material-icons">edit</i></a>
+            <a class="btn-small red" href="{% url 'empleados:delete_empleado' empleado.id %}"><i class="material-icons">cancel</i></a>
+        </td>
+    {%endfor%}
+    </tr>
+    </tbody>
+    </table>
+</div>
+
+{% include 'pagination.html' %}
+
+<div class="row center">
+    <a class="col xl12 btn-large green" href="{% url 'empleados:create_empleado' %}">Cargar Empleado</a>
+</div>
+<div class="row center">
+    <a class="col s12 xl12 btn-large" href="{% url 'home' %}">Volver</a>
+</div>
+
+
+{% endblock %}

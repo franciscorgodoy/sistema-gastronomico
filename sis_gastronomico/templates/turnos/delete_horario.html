@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Eliminar un Horario</h3>
+<div class="divider"></div>
+
+<div class="row center">
+    <h4>Quiere eliminar el Horario {{horario.horario}}?</h4>
+</div>
+<div class="row center">
+    <blockquote class="col xl8 offset-xl2">
+        <ul class="collection">
+            <li class="collection-item"><b>Horario:</b> {{horario.horario}}</li>
+            <li class="collection-item"><b>Desde:</b> {{horario.desde}}</li>
+            <li class="collection-item"><b>Hasta:</b> {{horario.hasta}}</li>
+        </ul>
+    </blockquote>
+</div>
+<div class="row center">
+    <form method="post" id="form">
+        {% csrf_token %}
+        <button class="btn green" type="submit"><i class="material-icons icon-align">check</i> Confirmar</button>
+        <a class="btn red" href="{% url 'turnos:list_horario' %}"><i class="material-icons icon-align">cancel</i> Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+</script>
+{% endblock %}

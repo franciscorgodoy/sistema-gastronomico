@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Listado de Proveedores</h3>
+<div class="divider"></div>
+
+{% if 'ok' in request.GET %}
+<div class="row">
+    <ul class="collection green-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 green-text">
+            <span class="badge">
+                <i class="material-icons green-text">check_box</i>
+            </span>
+            Proveedor Creado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'up' in request.GET %}
+<div class="row">
+    <ul class="collection green-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 green-text">
+            <span class="badge">
+                <i class="material-icons green-text">check_box</i>
+            </span>
+            Proveedor Modificado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'del' in request.GET %}
+<div class="row">
+    <ul class="collection orange-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 orange-text">
+            <span class="badge">
+                <i class="material-icons orange-text">check_box</i>
+            </span>
+            Proveedor Eliminado con Éxito!
+        </li>
+    </ul>
+</div>
+{% endif %}
+
+{% include 'pagination.html' %}
+
+<div class="row center">
+    <div class="col s12 xl12">
+        <table class="highlight centered">
+            <thead>
+                <th>Nombre</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th>Modificar/Eliminar</th>
+            </thead>
+            <tbody>
+                {% for proveedor in page_obj %}
+                <tr>
+                    <td>{{ proveedor.nombre | title |  truncatechars:30}}</td>
+                    <td>{{ proveedor.direccion | title | truncatechars:30 }}</td>
+                    <td>{{ proveedor.telefono | truncatechars:30 }}</td>
+                    <td>
+                        <a class="btn-small" href="{% url 'proveedores:update_proveedor' proveedor.id %}"><i class="material-icons">edit</i></a>
+                        <a class="btn-small red" href="{% url 'proveedores:borrar_proveedor' proveedor.id %}"><i class="material-icons">cancel</i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% include 'pagination.html' %}
+
+<div class="row center">
+    <a class="col s12 xl12 btn-large green" href="{% url 'proveedores:crear_proveedor' %}">Crear Proveedor</a>
+</div>
+<div class="row center">
+    <a class="col s12 xl12 btn-large" href="{% url 'home' %}">Volver</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Eliminar Proveedor</h3>
+<div class="divider"></div>
+
+<div class="row center">
+    <h4>Quiere eliminar el proveedor {{proveedor.nombre}}?</h4>
+</div>
+<div class="row center">
+    <blockquote class="col xl8 offset-xl2">
+        <ul class="collection">
+            <li class="collection-item">Direccion: {{proveedor.direccion}}</li>
+            <li class="collection-item">Telefono: {{proveedor.telefono}}</li>
+        </ul>
+    </blockquote>
+</div>
+<div class="row center">
+    <form method="post" id="form">
+        {% csrf_token %}
+        <button class="btn green" type="submit"><i class="material-icons icon-align">check</i> Confirmar</button>
+        <a class="btn red" href="{% url 'proveedores:index' %}"><i class="material-icons icon-align">cancel</i> Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}

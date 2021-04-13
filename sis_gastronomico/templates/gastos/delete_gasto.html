@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Eliminar Gasto</h3>
+<div class="divider"></div>
+
+<div class="row center">
+    <h4>Quiere eliminar el Gasto {{gasto.descripcion}}?</h4>
+</div>
+<div class="row center">
+    <blockquote class="col xl8 offset-xl2">
+        <ul class="collection">
+            <li class="collection-item">Descripcion: {{gasto.descripcion}}</li>
+            <li class="collection-item">Monto: {{gasto.monto}}</li>
+            <li class="collection-item">Tipo de Gasto: {{gasto.tipo_gasto}}</li>
+        </ul>
+    </blockquote>
+</div>
+<div class="row center">
+    <form method="post" id="form">
+        {% csrf_token %}
+        <button class="btn green" type="submit"><i class="material-icons icon-align">check</i> Confirmar</button>
+        <a class="btn red" href="{% url 'gastos:index' %}"><i class="material-icons icon-align">cancel</i> Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+</script>
+{% endblock %}

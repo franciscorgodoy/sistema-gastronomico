@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="center">Informes de Pedidos</h3>
+<div class="divider"></div>
+
+<div>
+    <form method="post" name="formfecha" id="formfecha">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col xl1">
+                <p>Fecha:</p>
+            </div>
+            <div class="col xl11">
+                <input name="fecha" id="fecha" type="text" class="datepicker letranormal" placeholder="Seleccione una Fecha">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col xl12 center">
+        <h1>Resultados</h1>
+    </div>
+    {% for turno in turnos %}
+    <div class="col xl12 center">
+        <h5>Fecha: {{turno.turno}}</h5>
+    </div>
+    <h5 class="center">Cantidad de Pedidos Totales</h5>
+    <div class="col xl10 offset-xl1" >
+        <div class="card">
+            <div class="card content"  style="padding: 0.5em !important;">
+                <canvas id="m_pedidos_chart{{forloop.counter}}" height="150" ></canvas>
+            </div>
+        </div>
+    </div>
+    <h5 class="center">Cantidad de Productos Totales</h5>
+    <div class="col xl10 offset-xl1" >
+        <div class="card">
+            <div class="card content"  style="padding: 0.5em !important;">
+                <canvas id="prod_x_prod_chart{{forloop.counter}}" height="150" ></canvas>
+            </div>
+        </div>
+    </div>
+    <h5 class="center">Facturación Total de los Pedidos</h5>
+    <div class="col xl10 offset-xl1" >
+        <div class="card">
+            <div class="card content"  style="padding: 0.5em !important;">
+                <canvas id="m_pagos_chart{{forloop.counter}}" height="150" ></canvas>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+<div class="row">
+    <a class="col s12 xl12 btn-large" href="{% url 'pedidos:index' %}">Volver</a>
+</div>
+
+<script>
+
+function randomInt(min, max) {
+	return min + Math.floor((max - min) * Math.random());
+}
+
+// var colors = [`rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(225,255)}, ${randomInt(0,50)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(225,255)}, ${randomInt(0,50)}, 0.5)`, `rgba(${randomInt(0,50)}, ${randomInt(0,50)}, ${randomInt(225,255)}, 0.8)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`,]
+var colors = [];
+for (let i = 0; i < 50; i++) {
+    colors.push(`rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.75)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`, `rgba(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)}, 0.5)`);
+}
+
+{% for turno in turnos %}
+var ctx = document.getElementById('m_pedidos_chart{{forloop.counter}}');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        responsive: true,
+        labels: [ {% for dato in turno.medios_pedidos %} "{{dato.tipo}}", {% endfor %} ],
+        datasets: [{
+            label: 'Cantidad',
+            data: [ {% for dato in turno.medios_pedidos %} {{dato.cantidad}}, {% endfor %} ],
+            backgroundColor: colors,
+            borderColor: colors,
+            borderWidth: 2,
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'Pedidos Totales: {{turno.total_pedidos}}'
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 1,
+                    maxTicksLimit: 5
+                }
+            }]
+        }
+    },
+});
+
+var ctx = document.getElementById('prod_x_prod_chart{{forloop.counter}}');
+var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        responsive: true,
+        labels: [ {% for dato in turno.total_tipos_productos %} "{{dato.tipo}}", {% endfor %} ],
+        datasets: [{
+            data: [ {% for dato in turno.total_tipos_productos %} {{dato.cantidad}}, {% endfor %} ],
+            backgroundColor: colors,
+            borderColor: colors,
+            borderWidth: 2,
+            weight: 1,
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'Productos Totales: {% if turno.total_productos.total %}{{turno.total_productos.total}} {% else %}0{% endif%}'
+        },
+    }
+});
+
+var ctx = document.getElementById('m_pagos_chart{{forloop.counter}}');
+var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        responsive: true,
+        labels: [ {% for dato in turno.total_medio_pago %} "{{dato.tipo}}", {% endfor %} ],
+        datasets: [{
+            label: '# Pedidos por Medio de Pedido',
+            data: [ {% for dato in turno.total_medio_pago %} {{dato.total}}, {% endfor %} ],
+            backgroundColor: colors,
+            borderColor: colors,
+            borderWidth: 2,
+            weight: 1,
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'Facturacion Total: ${% if turno.total_facturado.total %}{{turno.total_facturado.total}} {% else %}0{% endif%}'
+        },
+    }
+});
+{% endfor %}
+
+
+</script>
+</div>
+<style>
+    /* canvas{
+        width:500px !important;
+        height: 500px !important;
+    } */
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+        $('.datepicker').each((index, element) => {
+            // $(element).click(function (e){e.preventDefault();});
+            $(element).attr('placeholder', 'Ingrese una Fecha');
+            let fecha_input = $(element).val().split('-');
+            let fecha = '';
+            if (fecha_input[0] != '')
+                fecha = new Date(fecha_input[0], fecha_input[1]-1, fecha_input[2]);
+            $(element).datepicker({
+                format: 'yyyy-mm-dd',
+                setDefaultDate: true,
+                defaultDate: fecha,
+                autoClose: true,
+                i18n: {
+                    months: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+                    monthsShorts: ['Ene','Feb','Mar','','Abr','','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+                    weekdays: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'],
+                    weekdaysShort: ['Dom','Lun','Mar','Mie','Jue','Vie','Sab'],
+                    weekdaysAbbrev: ['D','L','M','X','J','V','S'],
+                },
+                onClose: () => {
+                    var fecha = $(element).val();
+                    if (fecha !== "")
+                        window.location.replace(`{% url 'pedidos:informes' %}?fecha=${$(element).val()}`);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

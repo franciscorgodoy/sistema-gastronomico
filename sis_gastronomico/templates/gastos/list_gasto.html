@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="center">Listado de Gastos</h3>
+<div class="divider"></div>
+
+{% if 'ok' in request.GET %}
+<div class="row">
+    <ul class="collection green-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 green-text">
+            <span class="badge">
+                <i class="material-icons green-text">check_box</i>
+            </span>
+            Gasto Creado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'up' in request.GET %}
+<div class="row">
+    <ul class="collection blue-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 blue-text">
+            <span class="badge">
+                <i class="material-icons blue-text">check_box</i>
+            </span>
+            Gasto Modificado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'del' in request.GET %}
+<div class="row">
+    <ul class="collection orange-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 orange-text">
+            <span class="badge">
+                <i class="material-icons orange-text">check_box</i>
+            </span>
+            Gasto Eliminado con Éxito!
+        </li>
+    </ul>
+</div>
+{% endif %}
+
+{% include 'pagination.html' %}
+<div class="row center">
+    <div class="col s12 xl12">
+        <table class="highlight centered">
+            <thead>
+                <th>Gasto</th>
+                <th>Tipo</th>
+                <th>Precio</th>
+                <th>Modificar/Eliminar</th>
+            </thead>
+            <tbody>
+                {% for gasto in page_obj %}
+                <tr>
+                    <td>{{ gasto.descripcion | title | truncatechars:30 }}</td>
+                    <td>{{ gasto.tipo_gasto.tipo | title | truncatechars:30 }}</td>
+                    <td>${{ gasto.monto }}</td>
+                    <td>
+                        <a class="btn-small" href="{% url 'gastos:update_gasto' gasto.id %}"><i class="material-icons">edit</i></a>
+                        <a class="btn-small red" href="{% url 'gastos:delete_gasto' gasto.id %}"><i class="material-icons">cancel</i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% include 'pagination.html' %}
+<div class="row center">
+    <a class="col s12 xl12 btn-large green" href="{% url 'gastos:create_gasto' %}">Nuevo Gasto</a>
+</div>
+<div class="row center">
+    <a class="col s12 xl12 btn-large orange" href="{% url 'gastos:create_adelantoSueldo' %}">Adelanto de Sueldo</a>
+</div>
+<div class="row center">
+    <a class="col s12 xl12 btn-large red" href="{% url 'gastos:list_tipo_gasto' %}">Tipos de Gastos</a>
+</div>
+<div class="row center">
+    <a class="col s12 xl12 btn-large" href="{% url 'home' %}">Volver</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<div class="card-panel ">
+    <h3 class="center">Detalle de la compra</h3>
+    <div class="divider"></div>
+
+    <div class="section">
+        <blockquote class="center">
+
+            <ul class="collection">
+                <li class="collection-item flow-text">Fecha: {{object.fecha|date:"d/m/Y"}}</li>
+                <li class="collection-item flow-text">Proveedor: {{object.proveedor}}</li>
+                <li class="collection-item flow-text">Total de la compra: ${{ object.precio_total }}</li>
+            </ul>
+        </blockquote>
+    </div>
+</div>
+
+<div class="card-panel ">
+
+<h3 class="center">Resumen de la compra</h3>
+<div class="divider"></div>
+
+<div class="section center">
+
+    <h4>Productos</h3>
+    <table class="highlight centered">
+        <thead>
+            <th>Producto</th>
+            <th>Precio Unitario</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+        </thead>
+        <tbody>
+            {% for detalle_producto in object.detalleproducto_set.all %}
+            <tr>
+                <td>{{ detalle_producto.producto }}</td>
+                <td>${{ detalle_producto.precio_unitario }}</td>
+                <td>{{ detalle_producto.cantidad }}</td>
+                <td>${{ detalle_producto.precio_total }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b>Subtotal Productos:</b> ${{ precio_total_productos }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="section center" >
+    <h4>Insumos</h4>
+    <table class="highlight centered">
+        <thead>
+            <th>Insumo</th>
+            <th>Precio Unitario</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+        </thead>
+        <tbody>
+            {% for detalle_insumo in object.detalleinsumo_set.all %}
+            <tr>
+                <td>{{ detalle_insumo.insumo }}</td>
+                <td>${{ detalle_insumo.precio_unitario }}</td>
+                <td>{{ detalle_insumo.cantidad }}</td>
+                <td>${{ detalle_insumo.precio_total }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b>Subtotal Insumos:</b> ${{ precio_total_insumos }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+
+        <div class="row section">
+            <a class="col s12 xl2 offset-xl1 btn-large green" href="{% url 'compras:update_compra' object.id %}">Modificar</a><div></div>
+            <a class="col s12 xl2 offset-xl2 btn-large red" href="{% url 'compras:delete_compra' object.id %}">Borrar</a><div></div>
+            <a class="col s12 xl2 offset-xl2 btn-large" href="{% url 'compras:index' %}">Volver</a>
+        </div>
+
+{% endblock %}

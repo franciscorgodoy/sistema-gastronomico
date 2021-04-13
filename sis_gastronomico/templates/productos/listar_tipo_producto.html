@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Listado Tipos de Productos</h3>
+<div class="divider"></div>
+
+{% if 'tgok' in request.GET %}
+<div class="row">
+    <ul class="collection green-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 green-text">
+            <span class="badge">
+                <i class="material-icons green-text">check_box</i>
+            </span>
+            Tipo de producto Creado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'tgup' in request.GET %}
+<div class="row">
+    <ul class="collection blue-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 blue-text">
+            <span class="badge">
+                <i class="material-icons blue-text">check_box</i>
+            </span>
+            Tipo de producto Eliminado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'tgdel' in request.GET %}
+<div class="row">
+    <ul class="collection orange-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 orange-text">
+            <span class="badge">
+                <i class="material-icons orange-text">warning</i>
+            </span>
+            Tipo de producto Eliminado con Éxito!
+        </li>
+    </ul>
+</div>
+{% endif %}
+
+{% include 'pagination.html' %}
+<div class="row center">
+    <div class="col s12 xl12">
+        <table class="highlight centered">
+            <thead>
+                <th>Tipo de Producto</th>
+                <th>Descripción</th>
+                <th>Modificar/Eliminar</th>
+            </thead>
+            <tbody>
+                {% for tipo_producto in page_obj %}
+                <tr>
+                    <td>{{ tipo_producto.tipo | title }}</td>
+                    <td>{{ tipo_producto.descripcion | title | truncatechars:50 }}</td>
+                    <td>
+                        <a class="btn-small" href="{% url 'productos:update_tipo_producto' tipo_producto.id %}"><i class="material-icons">edit</i></a>
+                        <a class="btn-small red" href="{% url 'productos:borrar_tipo_producto' tipo_producto.id %}"><i class="material-icons">cancel</i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% include 'pagination.html' %}
+<div class="row center">
+    <a class="col s12 xl12 btn-large green" href="{% url 'productos:crear_tipo_producto' %}">Nuevo Tipo de Producto</a>
+</div>
+<div class="row center">
+    <a class="col s12 xl12 btn-large" href="{% url 'productos:index' %}">Volver</a>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function(){
+            $('#confirmform').click(() => {
+                $('#form').submit();
+            })
+        });
+    </script>
+{% endblock %}

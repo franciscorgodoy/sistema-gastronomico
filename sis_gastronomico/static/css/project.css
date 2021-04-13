@@ -1,0 +1,75 @@
+/* These styles are generated from project.scss. */
+
+.alert-debug {
+  color: black;
+  background-color: white;
+  border-color: #d6e9c6;
+}
+
+.alert-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.collection.green-border-color {
+  border-color: #4CAF50 !important;
+}
+.collection.orange-border-color {
+  border-color: #FF9800 !important;
+}
+.collection.blue-border-color {
+  border-color: #2196F3 !important;
+}
+
+.home-text {
+  color: rgb(0,0,0,0.8) !important;
+}
+
+.icon-align {
+  vertical-align: middle;
+}
+
+/* Version */
+.version-cont {
+  margin: 1em;
+  border-color: black;
+}
+
+.version-text {
+  color: black;
+}
+/* Version */
+
+ /* SIDENAV CODE */
+ body, footer {
+  padding-left: 300px;
+}
+
+.sidenav-trigger {
+  display: none !important;
+}
+
+@media only screen and (max-width : 992px) {
+  header, body, footer {
+    padding-left: 0;
+  }
+
+  .sidenav-trigger {
+    display: contents !important;
+  }
+
+}
+ /* ------------------ */
+
+.sidenav .collapsible > li.waves-effect {
+  display: block;
+}
+
+.sidenav-logo {
+  margin: 1em !important;
+}
+
+strong, b {
+  font-weight: bold !important;
+}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Modificar Stock de un Producto</h3>
+<div class="divider"></div>
+
+
+<form method="post" autocomplete="off">
+    {% csrf_token %}
+    <div class="row">
+      {{ form.cantidad | materializecss:'s12 xl12'}}
+      {{form.producto}}
+    </div>
+
+    <div class="row">
+    <button class="btn waves-effect waves-light col s12 xl2" type="submit" name="action">
+        <i class="material-icons icon-align">check</i>
+        Guardar
+    </button>
+
+    <a class="col s12 offset-xl8 xl2 btn waves-effect waves-light red " href="{% url 'stocks:list_stockProducto' producto_ID %}">
+        <i class="material-icons icon-align">cancel</i>
+        Cancelar
+    </a>
+  </div>
+  </form>
+{% endblock %}

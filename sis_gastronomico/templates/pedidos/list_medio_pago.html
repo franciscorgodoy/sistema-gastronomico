@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Listado de Medio de Pago</h3>
+<div class="divider"></div>
+
+{% if 'ok' in request.GET %}
+<div class="row">
+    <ul class="collection green-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 green-text">
+            <span class="badge">
+                <i class="material-icons green-text">check_box</i>
+            </span>
+            Medio de Pago Creado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'up' in request.GET %}
+<div class="row">
+    <ul class="collection blue-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 blue-text">
+            <span class="badge">
+                <i class="material-icons blue-text">check_box</i>
+            </span>
+            Medio de Pago Modificado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'del' in request.GET %}
+<div class="row">
+    <ul class="collection orange-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 orange-text">
+            <span class="badge">
+                <i class="material-icons orange-text">check_box</i>
+            </span>
+            Medio de Pago Eliminado con Éxito!
+        </li>
+    </ul>
+</div>
+{% endif %}
+
+{% include 'pagination.html' %}
+<div class="row center">
+    <div class="col s12 xl12">
+        <table class="highlight centered">
+            <thead>
+                <th>Medio de Pago</th>
+                <th>Cuotas</th>
+                <th>Comision</th>
+                <th>Modificar/Eliminar</th>
+            </thead>
+            <tbody>
+                {% for mediopago in page_obj %}
+                <tr>
+                    <td>{{ mediopago.medio_pago }}</td>
+                    <td>{{ mediopago.cuotas }}</td>
+                    <td>{{ mediopago.comision }}%</td>
+                    <td>
+                        <a class="btn-small" href="{% url 'pedidos:update_medio_pago' mediopago.id%}"><i class="material-icons">edit</i></a>
+                        <a class="btn-small red" href="{% url 'pedidos:delete_medio_pago' mediopago.id%}"><i class="material-icons">cancel</i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% include 'pagination.html' %}
+<div class="row center">
+    <a class="col s12 xl12 btn-large green" href="{% url 'pedidos:create_medio_pago' %}">Nuevo Medio de Pago</a>
+</div>
+
+<div class="row center">
+    <a class="col s12 xl12 btn-large" href="{% url 'pedidos:index' %}">Volver</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Formulario de Empleado</h3>
+<div class="divider"></div>
+
+    <form  method="POST">
+        {% csrf_token %}
+        <div class="row">
+            {{form.nombre | materializecss:'s12 xl6'}}
+            {{form.apellido | materializecss:'s12 xl6'}}
+        </div>
+        <div class="row">
+            {{form.dni | materializecss:'s12 xl6'}}
+            {{form.genero | materializecss:'s12 xl6'}}
+        </div>
+        <div class="row">
+            {{form.fecha_nacimiento | materializecss:'s12 xl6'}}
+            {{form.fecha_ingreso | materializecss:'s12 xl6'}}
+        </div>
+        <div class="row">
+            <button class="btn waves-effect waves-light col s12 xl2" type="submit" name="action">
+                <i class="material-icons icon-align">check</i>
+                Agregar
+            </button>
+
+            <a class="btn red col s12 offset-xl8 xl2" href="{% url 'empleados:inicio' %}">
+                <i class="material-icons icon-align">cancel</i>
+                Cancelar
+            </a>
+        </div>
+    </form>
+
+{%endblock%}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="center">Listado de Compras</h3>
+<div class="divider"></div>
+
+{% if 'ok' in request.GET %}
+<div class="row">
+    <ul class="collection green-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 green-text">
+            <span class="badge">
+                <i class="material-icons green-text">check_box</i>
+            </span>
+            Compra Creada con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'up' in request.GET %}
+<div class="row">
+    <ul class="collection blue-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 blue-text">
+            <span class="badge">
+                <i class="material-icons blue-text">check_box</i>
+            </span>
+            Compra Modificado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'del' in request.GET %}
+<div class="row">
+    <ul class="collection orange-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 orange-text">
+            <span class="badge">
+                <i class="material-icons orange-text">check_box</i>
+            </span>
+            Compra Eliminada con Éxito!
+        </li>
+    </ul>
+</div>
+{% endif %}
+
+{% include 'pagination.html' %}
+
+<div class="row center">
+
+    <div class="col s12 xl12">
+        <table class="highlight centered">
+            <thead>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Ver detalles</th>
+            </thead>
+            <tbody>
+                {% for compra in page_obj %}
+                <tr>
+                    <td>{{ compra.fecha|date:"d/m/Y" }}</td>
+                    <td>${{ compra.precio_total }}</td>
+                    <td>
+                        <a class="btn-small" href="{% url 'compras:detail_compra' compra.id %}"><i class="material-icons">list</i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% include 'pagination.html' %}
+<div class="row">
+    <a class="col s12 xl12 btn-large green" href="{% url 'compras:create_compra' %}">Registrar Compra</a><div></div>
+</div>
+<div class="row">
+    <a class="col s12 xl12 btn-large" href="{% url 'home' %}">Volver</a>
+</div>
+
+
+{% endblock %}

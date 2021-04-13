@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Eliminar Medio de Pedido</h3>
+<div class="divider"></div>
+
+<div class="row center">
+    <h4>Está seguro que quiere eliminar este Medio de Pedido?</h4>
+</div>
+<div class="row center">
+    <blockquote class="col xl8 offset-xl2">
+        <ul class="collection">
+            <li class="collection-item">Medio de Pedido: {{mediopedido.medio_pedido}}</li>
+            <li class="collection-item">Aumento: {{mediopedido.aumento}}%</li>
+        </ul>
+    </blockquote>
+</div>
+<div class="row center">
+    <form method="post" id="form">
+        {% csrf_token %}
+
+        <button class="btn green waves-effect waves-light" type="submit" name="action">
+            <i class="material-icons icon-align">check</i>
+            Confirmar
+        </button>
+
+        <a class="btn red" href="{% url 'pedidos:list_medio_pedido' %}">
+            <i class="material-icons icon-align">cancel</i>
+            Cancelar
+        </a>
+    </form>
+</div>
+
+{% endblock %}

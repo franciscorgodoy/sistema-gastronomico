@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="center">NO HAY UN TURNO ACTIVO!</h3>
+<div class="divider"></div>
+
+<div class="row center">
+    <blockquote>
+        <h5>Por favor, crea un turno nuevo para cargar pedidos!</p>
+    </blockquote>
+</div>
+
+<div class="row center">
+    <a class="col s12 xl12 btn-large green" href="{% url 'turnos:create_turno' %}">Nuevo Turno</a>
+</div>
+
+{% endblock %}

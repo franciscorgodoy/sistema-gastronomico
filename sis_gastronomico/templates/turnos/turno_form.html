@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Formulario de Turno</h3>
+<div class="divider"></div>
+
+<div class="row center">
+    <form method="post" id="form">{% csrf_token %}
+        <div class="row">
+            {{form.horario | materializecss:'s12 xl12'}}
+        </div>
+        <div class="row">
+            {{ form.empleados | materializecss:'s12 xl12' }}
+        </div>
+        <div class="row center">
+            <button class="btn col s12 xl2" type="submit"><i class="material-icons icon-align">check</i> Agregar</button><div class="col s2"></div>
+            <a class="btn red col s12 offset-xl6 xl2" href="{% url 'turnos:index' %}"><i class="material-icons icon-align">cancel</i> Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

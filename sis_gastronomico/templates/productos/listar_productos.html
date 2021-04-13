@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load materializecss %}
+
+<h3 class="center">Listado de Productos</h3>
+<div class="divider"></div>
+
+{% if 'ok' in request.GET %}
+<div class="row">
+    <ul class="collection green-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 green-text">
+            <span class="badge">
+                <i class="material-icons green-text">check_box</i>
+            </span>
+            Producto Creado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'up' in request.GET %}
+<div class="row">
+    <ul class="collection green-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 green-text">
+            <span class="badge">
+                <i class="material-icons green-text">check_box</i>
+            </span>
+            Producto Modificado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'del' in request.GET %}
+<div class="row">
+    <ul class="collection orange-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 orange-text">
+            <span class="badge">
+                <i class="material-icons orange-text">check_box</i>
+            </span>
+            Producto Eliminado con Éxito!
+        </li>
+    </ul>
+</div>
+{% endif %}
+
+{% include 'pagination.html' %}
+
+<div class="row center">
+    <div class="col s12 xl12">
+        <table class="highlight centered">
+            <thead>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Modificar/Eliminar/Historial Stock</th>
+            </thead>
+            <tbody>
+                {% for producto in page_obj %}
+                <tr>
+                    <td>{{ producto.nombre | title |  truncatechars:30}}</td>
+                    <td>{{ producto.tipo_producto.tipo | title | truncatechars:30 }}</td>
+                    <td>${{ producto.precio | truncatechars:30 }}</td>
+                    <td>{{ producto.stockproducto_set.all.last.cantidad | truncatechars:30 }}</td>
+                    <td>
+                        <a class="btn-small" href="{% url 'productos:update_producto' producto.id %}"><i class="material-icons">edit</i></a>
+                        <a class="btn-small red" href="{% url 'productos:borrar_producto' producto.id %}"><i class="material-icons">cancel</i></a>
+                        <a class="btn-small" href="{% url 'stocks:list_stockProducto' producto.id  %}"><i class="material-icons">storage</i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% include 'pagination.html' %}
+
+<div class="row center">
+    <a class="col s12 xl12 btn-large green" href="{% url 'productos:crear_producto' %}">Crear Producto</a>
+</div>
+<div class="row center">
+    <a class="col s12 xl12 btn-large red" href="{% url 'productos:listar_tipo_producto' %}">Tipos de Productos</a>
+</div>
+<div class="row center">
+    <a class="col s12 xl12 btn-large" href="{% url 'home' %}">Volver</a>
+</div>
+
+{% endblock %}

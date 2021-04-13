@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="center">Listado de Turnos</h3>
+<div class="divider"></div>
+
+{% if 'ok' in request.GET %}
+<div class="row">
+    <ul class="collection green-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 green-text">
+            <span class="badge">
+                <i class="material-icons green-text">check_box</i>
+            </span>
+            Turno Creado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'up' in request.GET %}
+<div class="row">
+    <ul class="collection blue-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 blue-text">
+            <span class="badge">
+                <i class="material-icons blue-text">check_box</i>
+            </span>
+            Turno Modificado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'del' in request.GET %}
+<div class="row">
+    <ul class="collection orange-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 orange-text">
+            <span class="badge">
+                <i class="material-icons orange-text">check_box</i>
+            </span>
+            Turno Eliminado con Éxito!
+        </li>
+    </ul>
+</div>
+{% endif %}
+
+{% include 'pagination.html' %}
+<div class="row center">
+    <div class="col s12 xl12">
+        <table class="highlight centered">
+            <thead>
+                <th>Fecha</th>
+                <th>Horario</th>
+                <th>Modificar/Eliminar</th>
+            </thead>
+            <tbody>
+                {% for turno in page_obj %}
+                <tr>
+                    <td>{{ turno.fecha|date:"d/m/Y" }}</td>
+                    <td>{{ turno.horario }}</td>
+                    <td>
+                        <a class="btn-small" href="{% url 'turnos:update_turno' turno.id %}"><i class="material-icons">edit</i></a>
+                        <a class="btn-small red" href="{% url 'turnos:delete_turno' turno.id %}"><i class="material-icons">cancel</i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% include 'pagination.html' %}
+<div class="row center">
+    <a class="col s12 xl12 btn-large green" href="{% url 'turnos:create_turno' %}">Nuevo Turno</a>
+</div>
+<div class="row center">
+    <a class="col s12 xl12 btn-large red" href="{% url 'turnos:list_horario' %}">Horarios</a>
+</div>
+<div class="row center">
+    <a class="col s12 xl12 btn-large" href="{% url 'home' %}">Volver</a>
+</div>
+
+{% endblock %}

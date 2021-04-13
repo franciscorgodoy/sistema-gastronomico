@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="center">Listado de Insumos</h3>
+<div class="divider"></div>
+
+{% if 'ok' in request.GET %}
+<div class="row">
+    <ul class="collection green-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 green-text">
+            <span class="badge">
+                <i class="material-icons green-text">check_box</i>
+            </span>
+            Insumo Creado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'up' in request.GET %}
+<div class="row">
+    <ul class="collection blue-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 blue-text">
+            <span class="badge">
+                <i class="material-icons blue-text">check_box</i>
+            </span>
+            Insumo Modificado con Éxito!
+        </li>
+    </ul>
+</div>
+{% elif 'del' in request.GET %}
+<div class="row">
+    <ul class="collection orange-border-color col s12 xl10 offset-xl1">
+        <li class="collection-item s12 xl12 orange-text">
+            <span class="badge">
+                <i class="material-icons orange-text">check_box</i>
+            </span>
+            Insumo Eliminado con Éxito!
+        </li>
+    </ul>
+</div>
+{% endif %}
+
+{% include 'pagination.html' %}
+
+<div class="row center">
+
+    <div class="col s12 xl12">
+        <table class="highlight centered">
+            <thead>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Stock</th>
+                <th>Modificar/Eliminar/Historial stock</th>
+            </thead>
+            <tbody>
+                {% for insumo in page_obj %}
+                <tr>
+                    <td>{{ insumo.nombre | title }}</td>
+                    <td>{{ insumo.descripcion | title | truncatechars:35 }}</td>
+                    <td>{{ insumo.stockinsumo_set.all.last.cantidad }}</td>
+                    <td>
+                        <a class="btn-small" href="{% url 'insumos:update_insumo' insumo.id %}"><i class="material-icons">edit</i></a>
+                        <a class="btn-small red" href="{% url 'insumos:delete_insumo' insumo.id %}"><i class="material-icons">cancel</i></a>
+                        <a class="btn-small" href="{% url 'stocks:list_stockInsumo' insumo.id  %}"><i class="material-icons">storage</i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% include 'pagination.html' %}
+<div class="row">
+    <a class="col s12 xl12 btn-large green" href="{% url 'insumos:create_insumo' %}">Nuevo Insumo</a><div></div>
+</div>
+<div class="row">
+    <a class="col s12 xl12 btn-large" href="{% url 'home' %}">Volver</a>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="center">Listado de Stock de un Producto</h3>
+<div class="divider"></div>
+
+{% include 'pagination.html' %}
+
+<div class="row center">
+
+    <div class="col s12 xl12">
+        <table class="highlight centered">
+            <strong>Producto: {{producto.nombre| title   }}</strong>
+            <thead>
+                <th>Stock</th>
+                <th>fecha de modificación</th>
+            </thead>
+            <tbody>
+                {% for stock in page_obj %}
+                <tr>
+                    <td>{{ stock.cantidad}}</td>
+                    <td>{{ stock.fecha_modificacion}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% include 'pagination.html' %}
+
+<div class="row">
+    <a class="col s12 xl12 btn-large green" href="{% url 'stocks:update_stockProducto'  stock_actual.id  %}">Cargar Stock</a>
+</div>
+
+<div class="row">
+    <a class="col s12 xl12 btn-large" href="{% url 'productos:index'%}">Volver</a>
+</div>
+{% endblock %}

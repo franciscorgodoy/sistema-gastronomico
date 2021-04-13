@@ -1,0 +1,32 @@
+# This is a sample build configuration for Python.
+# Check our guides at https://confluence.atlassian.com/x/x4UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: python:3.7.3
+
+clone:
+  depth: full
+
+pipelines:
+  branches:
+    develop:
+      - step:
+          name: Build
+          script:
+            - git archive --format=tar.gz develop -o sist-gastronomico.tar.gz
+          artifacts:
+            - sist-gastronomico.tar.gz
+
+      - step:
+          name: Deploy to Test
+          deployment: Test
+          caches:
+            - pip
+          script:
+            - pipe: atlassian/heroku-deploy:1.2.1
+              variables:
+                HEROKU_API_KEY: $HEROKU_API_KEY
+                HEROKU_APP_NAME: $HEROKU_APP_NAME
+                ZIP_FILE: sist-gastronomico.tar.gz
+                WAIT: 'true'
